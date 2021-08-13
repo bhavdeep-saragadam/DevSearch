@@ -34,10 +34,9 @@ def createProject(request):
     return render(request, "projects/project_form.html",context)
     
 @login_required(login_url = "login")
-
 def updateProject(request, pk):
     
-    profile = request.user.profile 
+    profile = request.user.profile
     project = profile.project_set.get(id=pk)
     form = ProjectForm(instance=project)
 
@@ -46,8 +45,10 @@ def updateProject(request, pk):
         if form.is_valid():
             form.save()
             return redirect('projects')
+            
     context = {'form': form}
     return render(request, "projects/project_form.html", context)
+    
 @login_required(login_url = "login")
 
 def deleteProject(request, pk):
