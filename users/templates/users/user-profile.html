@@ -10,11 +10,19 @@
 	    <div class="column column--1of3">
 	      <div class="card text-center">
 		<div class="card__body dev">
+			{% if profile.username == 'Bhavdeep' %}
+			<p><strong>Verified ✔</strong></p>
+		{% endif %}
+		<br>
 		  <img class="avatar avatar--xl" src="{{profile.profile_image.url}}" />
+		  
 		  <h2 class="dev__name">{{profile.name}}</h2>
+		  
 		  <p class="dev__title">{{profile.short_intro}}</p>
 		  <p class="dev__location">{{profile.location}}</p>
+		
 		  <ul class="dev__social">
+		
 
 		{% if profile.social_Github %}
 		    <li>

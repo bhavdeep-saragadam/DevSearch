@@ -3,9 +3,10 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db.models import Q
 from .forms import CustomCreationForm, ProfileForm, SkillForm
-from .models import Profile
-
+from .models import Profile, Skill
+from .utils import searchProfiles
 
 # Create your views here.
 
@@ -57,8 +58,8 @@ def registerUser(request):
 	return render(request, 'users/login_register.html', context)
 
 def profiles(request):
-	profiles = Profile.objects.all()
-	context = {'profiles': profiles}
+	profiles, search_query = searchProfiles(request)
+	context = {'profiles': profiles, 'search_query':search_query}
 	return render(request, 'users/profiles.html',context)
 def userProfile(request,pk):
 	profile = Profile.objects.get(id=pk)
@@ -128,3 +129,15 @@ def updateSkill(request,pk):
 
 	context = {'form':form}
 	return render(request,'users/skill_form.html', context)
+
+def deleteSkill(request,pk):
+	profile = request.user.profile
+	skill = profile.skill_set.get(id=pk)
+
+	if request.method == 'POST':
+		skill.delete()
+		messages.success(request,'Skill Was Deleted Successfully!')
+		return redirect('account')
+		
+	context = {'object':skill}
+	return render(request, 'delete_template.html',context)
